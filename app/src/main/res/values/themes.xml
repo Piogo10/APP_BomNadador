@@ -6,7 +6,7 @@
     </style>
 
     <style name="CustomDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="android:background">@drawable/dialog_background</item>
+        <item name="android:background">@drawable/dialog_bk</item>
     </style>
 
 
