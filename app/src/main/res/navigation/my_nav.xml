@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.app.bomnadador.Fragments.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_statistics"
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/from_right" />
+        <action
+            android:id="@+id/action_home_to_config"
+            app:destination="@id/configFragment"
+            app:enterAnim="@anim/from_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.app.bomnadador.Fragments.StatisticsFragment"
+        android:label="Statistics"
+        tools:layout="@layout/fragment_statistics">
+        <action
+            android:id="@+id/action_statistics_to_home"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/from_left" />
+        <action
+            android:id="@+id/action_statistics_to_config"
+            app:destination="@id/configFragment"
+            app:enterAnim="@anim/from_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/configFragment"
+        android:name="com.app.bomnadador.Fragments.ConfigFragment"
+        android:label="Config"
+        tools:layout="@layout/fragment_config">
+        <action
+            android:id="@+id/action_config_to_home"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/from_left" />
+        <action
+            android:id="@+id/action_config_to_statistics"
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/from_left" />
+    </fragment>
+
+</navigation>
