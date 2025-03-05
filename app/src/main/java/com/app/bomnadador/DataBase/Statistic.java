@@ -22,11 +22,14 @@ public class Statistic implements Serializable {
     private int totalQuestionsUnDone;
     private int totalQuestionsCorrect;
     private int totalQuestionsIncorrect;
+    //==========================//
+    //==========================//
+    private String listQuestionsNewDone;
     private String listQuestionsIncorrect;
     private String listQuestionsSave;
     private String listExamesTime;
 
-    public Statistic(int id, int totalExamesDone, int totalExamesPass, int totalExamesFail, int totalQuestionsDone, int totalQuestionsUnDone, int totalQuestionsCorrect, int totalQuestionsIncorrect, String listQuestionsIncorrect, String listQuestionsSave, String listExamesTime) {
+    public Statistic(int id, int totalExamesDone, int totalExamesPass, int totalExamesFail, int totalQuestionsDone, int totalQuestionsUnDone, int totalQuestionsCorrect, int totalQuestionsIncorrect, String listQuestionsNewDone, String listQuestionsIncorrect, String listQuestionsSave, String listExamesTime) {
         this.id = id;
         this.totalExamesDone = totalExamesDone;
         this.totalExamesPass = totalExamesPass;
@@ -35,6 +38,7 @@ public class Statistic implements Serializable {
         this.totalQuestionsUnDone = totalQuestionsUnDone;
         this.totalQuestionsCorrect = totalQuestionsCorrect;
         this.totalQuestionsIncorrect = totalQuestionsIncorrect;
+        this.listQuestionsNewDone = listQuestionsNewDone;
         this.listQuestionsIncorrect = listQuestionsIncorrect;
         this.listQuestionsSave = listQuestionsSave;
         this.listExamesTime = listExamesTime;
@@ -102,6 +106,14 @@ public class Statistic implements Serializable {
 
     public void setTotalQuestionsIncorrect(int totalQuestionsIncorrect) {
         this.totalQuestionsIncorrect = totalQuestionsIncorrect;
+    }
+
+    public String getListQuestionsNewDone() {
+        return listQuestionsNewDone;
+    }
+
+    public void setListQuestionsNewDone(String listQuestionsNewDone) {
+        this.listQuestionsNewDone = listQuestionsNewDone;
     }
 
     public String getListQuestionsIncorrect() {

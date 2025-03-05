@@ -78,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
             0,
             0,
             0,
+            -1,
             0,
             0,
-            0,
+            "",
             "",
             "",
             ""
@@ -119,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
                         questions.clear();
                         questions.addAll(listaPerguntas);
-                        Collections.shuffle(questions);
-                        questions = new ArrayList<>(questions.subList(0, Math.min(40, questions.size())));
 
                         Toast.makeText(this, "API DONE", Toast.LENGTH_SHORT).show();
                         Toast.makeText(this, "size: " + listaPerguntas.size(), Toast.LENGTH_SHORT).show();

@@ -24,8 +24,8 @@ public interface StatisticDAO {
     //==========================//
     @Query("UPDATE statistic SET totalQuestionsDone = totalQuestionsDone + :quantidade WHERE id = :id")
     void addQuestionsDone(int id, int quantidade);
-    @Query("UPDATE statistic SET totalQuestionsUnDone = totalQuestionsUnDone + :quantidade WHERE id = :id")
-    void addQuestionsUnDone(int id, int quantidade);
+    @Query("UPDATE statistic SET totalQuestionsUnDone = :totalQuestionsUnDone WHERE id = :id")
+    void updateQuestionsUnDone(int id, int totalQuestionsUnDone);
     @Query("UPDATE statistic SET totalQuestionsCorrect = totalQuestionsCorrect + :quantidade WHERE id = :id")
     void addQuestionsCorrect(int id, int quantidade);
     @Query("UPDATE statistic SET totalQuestionsIncorrect = totalQuestionsIncorrect + :quantidade WHERE id = :id")
@@ -38,4 +38,6 @@ public interface StatisticDAO {
     void updateQuestionsSave(int id, String listQuestionsSave);
     @Query("UPDATE statistic SET listExamesTime = :listExamesTime WHERE id = :id")
     void updateExamesTime(int id, String listExamesTime);
+    @Query("UPDATE statistic SET listQuestionsNewDone = :listQuestionsNewDone WHERE id = :id")
+    void updateQuestionsNewDone(int id, String listQuestionsNewDone);
 }

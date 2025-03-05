@@ -31,6 +31,7 @@ public class ExamActivity extends AppCompatActivity {
     private ActivityExamBinding binding;
     private ArrayList<Questions> questions = new ArrayList<>();
     private int contPerguntas = 0;
+    private int api_size = 0;
     private String respostaSelect = null;
     private String[] respostasDadas;
     private boolean[] perguntasRespondidas;
@@ -99,6 +100,7 @@ public class ExamActivity extends AppCompatActivity {
     //===================================//
     private void startExam() {
         questions = (ArrayList<Questions>) getIntent().getSerializableExtra("questions");
+        api_size  = getIntent().getIntExtra("api_size", 0);
 
         if (questions == null || questions.isEmpty()) {
             Toast.makeText(this, "Erro ao carregar perguntas", Toast.LENGTH_SHORT).show();
@@ -168,6 +170,7 @@ public class ExamActivity extends AppCompatActivity {
         respostasDadas[contPerguntas] = respostaSelect;
         binding.btnNext.setEnabled(false);
 
+        verifyNewQuestion();
         savePerguntaErrada();
         addCores();
         if (contPerguntas == questions.size() - 1) {
@@ -186,6 +189,27 @@ public class ExamActivity extends AppCompatActivity {
         }
 
         updateProgressBar();
+    }
+
+    private void verifyNewQuestion(){
+        StatisticDAO statisticDAO = database.estatisticasExamesDao();
+        Statistic estatistica = statisticDAO.getStatistic();
+
+        Questions perguntaAtual = questions.get(contPerguntas);
+        String perguntaId = String.valueOf(perguntaAtual.getId());
+
+        List<String> listaPerguntas = estatistica.getListQuestionsNewDone() == null || estatistica.getListQuestionsNewDone().isEmpty()
+                ? new ArrayList<>()
+                : new ArrayList<>(Arrays.asList(estatistica.getListQuestionsNewDone().split(",")));
+
+        if (!listaPerguntas.contains(perguntaId)) {
+            listaPerguntas.add(perguntaId);
+            int totalQuestionsUnDone = api_size - listaPerguntas.size();
+            statisticDAO.updateQuestionsUnDone(estatistica.getId(), totalQuestionsUnDone);
+
+            String novaStringPerguntas = String.join(",", listaPerguntas);
+            statisticDAO.updateQuestionsNewDone(estatistica.getId(), novaStringPerguntas);
+        }
     }
     private void showResultado() {
         handler.removeCallbacks(runnable);
