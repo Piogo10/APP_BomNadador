@@ -42,14 +42,14 @@ public class HomeFragment extends Fragment {
                         MainActivity mainActivity = (MainActivity) getActivity();
                         if (mainActivity != null) {
                             ArrayList<Questions> questions = mainActivity.sendAPIdata();
-                            int api_size = questions.size();
+                            int api_size_all = questions.size();
 
                             Collections.shuffle(questions);
                             questions = new ArrayList<>(questions.subList(0, Math.min(40, questions.size())));
 
                             Intent intent = new Intent(getActivity(), ExamActivity.class);
                             intent.putExtra("questions", questions);
-                            intent.putExtra("api_size", api_size);
+                            intent.putExtra("api_size_all", api_size_all);
                             startActivityForResult(intent, 1);
                         }
                     })

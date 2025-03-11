@@ -146,4 +146,9 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Questions> sendAPIdata() {
         return questions;
     }
+
+    public int sendAPIsize(){
+        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+        return questions.size();
+    }
 }
