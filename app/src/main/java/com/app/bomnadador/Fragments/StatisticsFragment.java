@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StatisticsFragment extends Fragment {
@@ -101,6 +102,8 @@ public class StatisticsFragment extends Fragment {
 
         int nivelPreparacao = calcularPreparacao(totalQuestionsDone, totalQuestionsCorrect, totalExamesDone, totalExamesPass);
         setupChart(binding.chartReady, nivelPreparacao, 100 - nivelPreparacao, yellowColor, greyColor, String.valueOf(nivelPreparacao)+"%");
+
+        binding.txtExameTempoMedio.setText(calcularTempoMedio(estatistica)+" min");
     }
 
     private int calcularPreparacao(int totalQuestionsDone, int totalQuestionsCorrect, int totalExamesDone, int totalExamesPass) {
@@ -120,7 +123,7 @@ public class StatisticsFragment extends Fragment {
                 (taxaSucessoExames * 0.60) + // 60% (Taxa de Sucesso nos Exames)
                 (experienciaPeso * 0.25) - // 25% (Experiencia, quantidade de Exames Feitos)
                 (falhasQuestions * 0.05) - // -5% (Penalizações nas Perguntas Erradas)
-                (falhasExames * 0.15); // -20% (Penalizações nos Exames Reprovados)
+                (falhasExames * 0.15); // -15% (Penalizações nos Exames Reprovados)
 
         return (int) resultadoFinal;
     }
@@ -130,6 +133,34 @@ public class StatisticsFragment extends Fragment {
         int visibility = (detailsView.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
         TransitionManager.beginDelayedTransition((ViewGroup) detailsView.getParent(), new AutoTransition());
         detailsView.setVisibility(visibility);
+    }
+
+    private String calcularTempoMedio(Statistic estatistica){
+
+        List<String> listaPerguntas = estatistica.getListExamesTime() == null || estatistica.getListExamesTime().isEmpty()
+                ? new ArrayList<>()
+                : new ArrayList<>(Arrays.asList(estatistica.getListExamesTime().split(",")));
+
+        if (listaPerguntas.isEmpty()) {
+            return "00:00";
+        }
+
+        int totalSegundos = 0;
+        int numTempos = listaPerguntas.size();
+
+        for (String tempo : listaPerguntas) {
+            String[] partes = tempo.split(":");
+            int minutos = Integer.parseInt(partes[0]);
+            int segundos = Integer.parseInt(partes[1]);
+            totalSegundos += (minutos * 60) + segundos;
+        }
+
+        int tempoMedioSegundos = totalSegundos / numTempos;
+
+        int minutosMedios = tempoMedioSegundos / 60;
+        int segundosMedios = tempoMedioSegundos % 60;
+
+        return String.format("%02d:%02d", minutosMedios, segundosMedios);
     }
 
     private void updateStatistics(int examesAprovados, int examesReprovados, int examesRealizados, int questionsAprovados, int questionsReprovados, int questionsRealizados, int questionsNaoRealizados) {
