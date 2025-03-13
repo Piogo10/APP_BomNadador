@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     //---------------------------//
     private ArrayList<Questions> questions;
     private DataBase database;
+    private StatisticDAO statisticDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +61,14 @@ public class MainActivity extends AppCompatActivity {
         binding.navConfig.setOnClickListener(v -> {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, configFragment).commit();
         });
-
         database = DataBase.getDataBase(this);
-        StatisticDAO statisticDAO = database.estatisticasExamesDao();
-        checkDataBase(statisticDAO);
+        statisticDAO = database.estatisticasExamesDao();
 
         questions = new ArrayList<>();
         getAPIdata();
     }
 
-    private void checkDataBase(StatisticDAO statisticDAO){
+    private void checkDataBase(){
         Statistic estatistica = statisticDAO.getStatistic();
         if (estatistica == null) {
             estatistica = new Statistic(
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             0,
             0,
             0,
-            -1,
+                    questions.size(),
             0,
             0,
             "",
@@ -120,10 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
                         questions.clear();
                         questions.addAll(listaPerguntas);
+                        checkDataBase();
 
-                        Toast.makeText(this, "API DONE", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(this, "size: " + listaPerguntas.size(), Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(this, "Perguntas Carregadas!", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         retryAPICall(queue, this);
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 },
                 error -> {
                     Log.d("API_LOG", "Error: " + error);
-                    Toast.makeText(this, "API ERRO", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Erro ao carregar as perguntas", Toast.LENGTH_SHORT).show();
                     retryAPICall(queue, this);
                 }
         );
@@ -141,14 +139,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void retryAPICall(RequestQueue queue, Context context) {
         new Handler(Looper.getMainLooper()).postDelayed(this::getAPIdata, 1000);
-        Toast.makeText(context, "Tentar dar GET outravez...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "A tentar Outravez...", Toast.LENGTH_SHORT).show();
     }
     public ArrayList<Questions> sendAPIdata() {
         return questions;
     }
 
     public int sendAPIsize(){
-        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
         return questions.size();
     }
 }
