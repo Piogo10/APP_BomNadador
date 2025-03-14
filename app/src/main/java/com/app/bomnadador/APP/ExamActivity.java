@@ -63,18 +63,22 @@ public class ExamActivity extends AppCompatActivity {
         startExam();
     }
 
+    public void confirmFinish(boolean needConfirm){
+
+        if (needConfirm){
+
+        }
+
+    }
+
     @Override
     public void finish() {
-        if (api_size_all != 0){
-            new AlertDialog.Builder(this)
-                    .setTitle("Confirmação")
-                    .setMessage("Deseja mesmo sair?")
-                    .setPositiveButton("Sim", (dialog, which) -> super.finish())
-                    .setNegativeButton("Não", null)
-                    .show();
-        }
-        else
-            super.finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmação")
+                .setMessage("Deseja mesmo sair?")
+                .setPositiveButton("Sim", (dialog, which) -> super.finish())
+                .setNegativeButton("Não", null)
+                .show();
     }
 
 
@@ -113,7 +117,7 @@ public class ExamActivity extends AppCompatActivity {
 
         if (questions == null || questions.isEmpty()) {
             Toast.makeText(this, "Erro ao carregar perguntas", Toast.LENGTH_SHORT).show();
-            finish();
+            super.finish();
             return;
         }
 
@@ -265,7 +269,7 @@ public class ExamActivity extends AppCompatActivity {
             showQuestions();
         });
 
-        btnLeave.setOnClickListener(v -> finish());
+        btnLeave.setOnClickListener(v -> super.finish());
 
         dialog.show();
     }
