@@ -27,6 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Iniciar Exame \nPerguntas Erradas" />
+
+        <Button
+            android:id="@+id/btnExamCapitulo"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Iniciar Exame \nPor Capitulo" />
     </LinearLayout>
 
 

@@ -1,14 +1,17 @@
 package com.app.bomnadador.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.app.bomnadador.APP.ExamActivity;
@@ -61,7 +64,8 @@ public class HomeFragment extends Fragment {
                     .setNegativeButton("Não", null)
                     .show();
         });
-g
+
+        binding.btnExamCapitulo.setOnClickListener(v -> showCapituloDialog());
     }
 
     public void startNormalExam() {
@@ -126,5 +130,67 @@ g
             startActivityForResult(intent, 1);
         }
     }
+
+
+    public void showCapituloDialog() {
+        EditText input = new EditText(getActivity());
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setHint("Insira o número do capítulo (1-9)");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Escolher Capítulo")
+                .setMessage("Digite o número do capítulo que você deseja")
+                .setView(input)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            int capituloEscolhido = Integer.parseInt(input.getText().toString());
+
+                            if (capituloEscolhido >= 1 && capituloEscolhido <= 9) {
+                                startCapituloExam(capituloEscolhido);
+                            } else {
+                                Toast.makeText(getActivity(), "Capítulo inválido! Escolha entre 1 e 9.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(getActivity(), "Por favor, insira um número válido.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builder.create().show();
+    }
+
+    public void startCapituloExam(int capituloEscolhido) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) {
+            ArrayList<Questions> questions = mainActivity.sendAPIdata();
+            ArrayList<Questions> questionsFiltradas = new ArrayList<>();
+
+            for (Questions question : questions) {
+                if (question.getCapitulo() == capituloEscolhido) {
+                    questionsFiltradas.add(question);
+                }
+            }
+
+            if (questionsFiltradas.isEmpty()) {
+                return;
+            }
+
+            Collections.shuffle(questionsFiltradas);
+
+            Intent intent = new Intent(getActivity(), ExamActivity.class);
+            intent.putExtra("questions", questionsFiltradas);
+            intent.putExtra("api_size_all", questionsFiltradas.size());
+            startActivityForResult(intent, 1);
+        }
+    }
+
 
 }
