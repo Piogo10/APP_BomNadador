@@ -57,18 +57,26 @@ public class ExamActivity extends AppCompatActivity {
         binding.btnNext.setOnClickListener(v -> verifyResposta());
         binding.btnLeft.setOnClickListener(v -> navPerguntas(-1));
         binding.btnRight.setOnClickListener(v -> navPerguntas(1));
-        binding.btnvoltar.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Confirmação")
-                    .setMessage("Deseja mesmo sair?")
-                    .setPositiveButton("Sim", (dialog, which) -> finish())
-                    .setNegativeButton("Não", null)
-                    .show();
-        });
+        binding.btnvoltar.setOnClickListener(v -> finish());
         binding.btnSave.setOnClickListener(v -> savePergunta());
 
         startExam();
     }
+
+    @Override
+    public void finish() {
+        if (api_size_all != 0){
+            new AlertDialog.Builder(this)
+                    .setTitle("Confirmação")
+                    .setMessage("Deseja mesmo sair?")
+                    .setPositiveButton("Sim", (dialog, which) -> super.finish())
+                    .setNegativeButton("Não", null)
+                    .show();
+        }
+        else
+            super.finish();
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -227,7 +235,7 @@ public class ExamActivity extends AppCompatActivity {
             }
         }
 
-        boolean aprovado = erradas <= 3;
+        boolean aprovado = erradas <= 5;
         atualizarEstatisticas(true, aprovado);
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_resultado, null);
